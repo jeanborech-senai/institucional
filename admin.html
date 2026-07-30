@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduShare — Painel Admin</title>
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-logo">Edu<span>Share</span></div>
+      <div class="sidebar-sub">Painel Administrativo</div>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="user-avatar">A</div>
+      <div>
+        <div class="user-name" id="adminName">Admin</div>
+        <div class="user-role">🔑 Administrador</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-link" href="dashboard.html">
+        <span>🏠</span> Ver conteúdos
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-logout" id="logoutBtn">
+        <span>🚪</span> Sair
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="admin-main">
+
+    <header class="admin-topbar">
+      <h1>⚙️ Painel de Administração</h1>
+      <a href="dashboard.html" class="back-link">← Voltar ao dashboard</a>
+    </header>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📄</div>
+        <div>
+          <div class="stat-value" id="statContents">—</div>
+          <div class="stat-label">Conteúdos publicados</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div>
+          <div class="stat-value" id="statUsers">—</div>
+          <div class="stat-label">Usuários cadastrados</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div>
+          <div class="stat-value" id="statCourses">—</div>
+          <div class="stat-label">Cursos cadastrados</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-target="panelCourses">📚 Cursos</button>
+      <button class="admin-tab" data-target="panelUCs">🎯 Unidades Curriculares</button>
+      <button class="admin-tab" data-target="panelUsers">👥 Usuários</button>
+    </div>
+
+    <!-- CURSOS -->
+    <div id="panelCourses" class="admin-panel active">
+      <div class="panel-grid">
+
+        <!-- Formulário -->
+        <div class="form-card">
+          <h3 id="courseFormTitle">Novo Curso</h3>
+          <form id="courseForm" novalidate>
+            <div class="form-group">
+              <label for="courseName">Nome do curso *</label>
+              <input type="text" id="courseName" placeholder="Ex: Técnico em Mecânica" />
+            </div>
+            <div class="form-group">
+              <label for="courseAbbr">Sigla</label>
+              <input type="text" id="courseAbbr" placeholder="Ex: TM" maxlength="10" />
+            </div>
+            <div class="form-group">
+              <label class="form-check">
+                <input type="checkbox" id="courseActive" checked />
+                Curso ativo (visível nos filtros)
+              </label>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn-save" id="saveCourse">💾 Salvar curso</button>
+              <button type="button" class="btn-cancel-edit" id="cancelCourseEdit">✕ Cancelar</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Tabela -->
+        <div class="table-card">
+          <div class="table-card-header">Cursos cadastrados</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Sigla</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="coursesTable">
+              <tr><td colspan="4" class="table-empty">Carregando…</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- UNIDADES CURRICULARES -->
+    <div id="panelUCs" class="admin-panel">
+      <div class="panel-grid">
+
+        <div class="form-card">
+          <h3 id="ucFormTitle">Nova Unidade Curricular</h3>
+          <form id="ucForm" novalidate>
+            <div class="form-group">
+              <label for="ucCourse">Curso *</label>
+              <select id="ucCourse">
+                <option value="">Selecione o curso</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="ucName">Nome da UC *</label>
+              <input type="text" id="ucName" placeholder="Ex: Fundamentos de Eletricidade" />
+            </div>
+            <div class="form-group">
+              <label for="ucAbbr">Sigla</label>
+              <input type="text" id="ucAbbr" placeholder="Ex: FE" maxlength="10" />
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn-save" id="saveUC">💾 Salvar UC</button>
+              <button type="button" class="btn-cancel-edit" id="cancelUCEdit">✕ Cancelar</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="table-card">
+          <div class="table-card-header">Unidades Curriculares cadastradas</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Curso</th>
+                <th>Sigla</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="ucsTable">
+              <tr><td colspan="4" class="table-empty">Carregando…</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- USUÁRIOS -->
+    <div id="panelUsers" class="admin-panel">
+      <div class="table-card">
+        <div class="table-card-header">
+          Usuários cadastrados
+          <span style="font-size:.75rem;color:var(--gray-600);">Gerencie papéis de acesso</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>Papel</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="usersTable">
+            <tr><td colspan="4" class="table-empty">Carregando…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="toastContainer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

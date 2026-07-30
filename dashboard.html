@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduShare — Conteúdos</title>
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+
+<div class="app-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">Edu<span>Share</span></div>
+
+    <div class="sidebar-user">
+      <div class="user-avatar" id="avatarInitial">?</div>
+      <div class="user-info">
+        <div class="user-name" id="userName">Carregando…</div>
+        <div class="user-role" id="userRole"></div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-link active" href="dashboard.html">
+        <span class="nav-icon">🏠</span> Início
+      </a>
+      <a class="nav-link" id="adminLink" href="admin.html" style="display:none;">
+        <span class="nav-icon">⚙️</span> Painel Admin
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-logout" id="logoutBtn">
+        <span>🚪</span> Sair
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <h1>📖 Conteúdos Educacionais</h1>
+      <div class="topbar-right">
+        <button class="btn-publish" id="openUploadModal">
+          ➕ Publicar conteúdo
+        </button>
+      </div>
+    </header>
+
+    <!-- Filtros -->
+    <div class="filters-bar">
+      <div class="filter-group">
+        <select class="filter-select" id="filterCourse">
+          <option value="">Todos os cursos</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <select class="filter-select" id="filterUC">
+          <option value="">Todas as UCs</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <select class="filter-select" id="filterType">
+          <option value="">Todos os tipos</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <input type="search" class="search-input" id="searchInput" placeholder="🔍 Buscar por título…" />
+      </div>
+      <button class="btn-clear-filters" id="clearFilters">✕ Limpar filtros</button>
+
+      <div class="filters-right">
+        <span class="content-count" id="contentCount"></span>
+      </div>
+    </div>
+
+    <!-- Feed -->
+    <section class="feed-section">
+      <div class="feed-loading" id="feedLoading">
+        <div class="spinner"></div>
+        <span>Carregando conteúdos…</span>
+      </div>
+      <div id="feed" style="display:none;"></div>
+    </section>
+
+  </div>
+</div>
+
+<!-- Modal de Upload -->
+<div class="modal-overlay" id="uploadModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>📤 Publicar conteúdo</h2>
+      <button class="btn-close" id="closeModal">✕</button>
+    </div>
+
+    <form class="modal-form" id="uploadForm" novalidate>
+
+      <div class="form-group">
+        <label for="uploadTitle">Título *</label>
+        <input type="text" id="uploadTitle" placeholder="Nome do material" required />
+      </div>
+
+      <div class="form-group">
+        <label for="uploadDescription">Descrição</label>
+        <textarea id="uploadDescription" placeholder="Descreva brevemente o conteúdo…"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="uploadCourse">Curso *</label>
+          <select id="uploadCourse" required>
+            <option value="">Selecione o curso</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="uploadUC">Unidade Curricular *</label>
+          <select id="uploadUC" required>
+            <option value="">Selecione a UC</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="uploadType">Tipo de conteúdo *</label>
+        <select id="uploadType" required>
+          <option value="">Tipo de conteúdo</option>
+        </select>
+      </div>
+
+      <!-- Área de arquivo (oculta para vídeo) -->
+      <div id="fileSection" class="form-group">
+        <label>Arquivo *</label>
+        <div class="dropzone" id="dropzone">
+          <span id="fileLabel">Clique ou arraste o arquivo aqui</span>
+          <input type="file" id="uploadFile" />
+        </div>
+      </div>
+
+      <!-- Campo de link para vídeo (oculto por padrão) -->
+      <div id="videoLinkSection" class="form-group" style="display:none;">
+        <label for="videoLink">Link do vídeo *</label>
+        <input type="url" id="videoLink" placeholder="https://youtube.com/..." />
+      </div>
+
+      <!-- Competências / Habilidades -->
+      <div class="form-group">
+        <label>Competências / Habilidades</label>
+        <div class="competency-input-row">
+          <input type="text" id="competencyInput" placeholder="Digite uma competência e pressione Enter" />
+          <button type="button" class="btn-add-tag" id="addCompetency">+ Add</button>
+        </div>
+        <div id="competencyTags"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" id="cancelUpload">Cancelar</button>
+        <button type="submit" class="btn-submit">Publicar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="toastContainer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/dashboard.js"></script>
+
+<script>
+  // Atualiza avatar com inicial do nome
+  document.addEventListener('DOMContentLoaded', async () => {
+    const session = await getSession();
+    if (session) {
+      const profile = await getUserProfile(session.user.id).catch(() => null);
+      if (profile) {
+        const avatar = document.getElementById('avatarInitial');
+        if (avatar) avatar.textContent = profile.full_name[0].toUpperCase();
+      }
+    }
+  });
+</script>
+</body>
+</html>

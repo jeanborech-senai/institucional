@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduShare — Plataforma de Conteúdo Educacional</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="auth-page">
+
+  <!-- Brand / Esquerda -->
+  <aside class="auth-brand">
+    <div class="brand-logo">Edu<span>Share</span></div>
+    <p class="brand-tagline">
+      Plataforma colaborativa para professores compartilharem conteúdos didáticos organizados por curso e unidade curricular.
+    </p>
+    <ul class="brand-features">
+      <li class="brand-feature">
+        <span class="feat-icon">📚</span>
+        Organizado por curso e UC
+      </li>
+      <li class="brand-feature">
+        <span class="feat-icon">📎</span>
+        Slides, PDFs, planilhas, docs e mais
+      </li>
+      <li class="brand-feature">
+        <span class="feat-icon">🔍</span>
+        Filtros por competências e habilidades
+      </li>
+      <li class="brand-feature">
+        <span class="feat-icon">🔑</span>
+        Painel admin para gerenciar cursos e UCs
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Formulário / Direita -->
+  <main class="auth-box">
+    <div class="auth-box-inner">
+      <h2>Bem-vindo(a)</h2>
+      <p class="subtitle">Acesse ou crie sua conta de professor</p>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-target="loginSection">Entrar</button>
+        <button class="auth-tab" data-target="registerSection">Cadastrar</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="loginSection" class="auth-form active">
+        <div id="loginMsg" class="auth-message"></div>
+        <form id="loginForm" novalidate>
+          <div class="form-group">
+            <label for="loginEmail">E-mail</label>
+            <input type="email" id="loginEmail" placeholder="seu@email.com" required autocomplete="email" />
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Senha</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password" />
+          </div>
+          <button type="submit" class="btn-primary" data-label="Entrar">Entrar</button>
+        </form>
+      </div>
+
+      <!-- CADASTRO -->
+      <div id="registerSection" class="auth-form">
+        <div id="registerMsg" class="auth-message"></div>
+        <form id="registerForm" novalidate>
+          <div class="form-group">
+            <label for="registerName">Nome completo</label>
+            <input type="text" id="registerName" placeholder="Seu nome" required autocomplete="name" />
+          </div>
+          <div class="form-group">
+            <label for="registerEmail">E-mail institucional</label>
+            <input type="email" id="registerEmail" placeholder="professor@instituicao.edu.br" required autocomplete="email" />
+          </div>
+          <div class="form-group">
+            <label for="registerPassword">Senha</label>
+            <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres" required autocomplete="new-password" />
+            <div class="password-strength">
+              <div class="strength-track"><div id="strengthBar"></div></div>
+              <span id="strengthLabel"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="registerConfirm">Confirmar senha</label>
+            <input type="password" id="registerConfirm" placeholder="Repita a senha" required autocomplete="new-password" />
+          </div>
+          <button type="submit" class="btn-primary" data-label="Criar conta">Criar conta</button>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<div id="toastContainer"></div>
+
+<!-- Supabase CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>
