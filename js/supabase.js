@@ -2,7 +2,7 @@
 // CONFIGURAÇÃO DO SUPABASE
 // Substitua pelos seus dados do projeto Supabase
 // =============================================
-const SUPABASE_URL = 'https://gzlorfthevgkelpipnuk.supabase.co/rest/v1/';
+const SUPABASE_URL = 'https://gzlorfthevgkelpipnuk.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6bG9yZnRoZXZna2VscGlwbnVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU0NDcyNTcsImV4cCI6MjEwMTAyMzI1N30.tvExxVD6rTTnG0jPlQbdUK79zTZfvyjGQpYzb5RWRgU';
 
 const { createClient } = supabase;
