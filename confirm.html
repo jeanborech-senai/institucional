@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduShare — E-mail confirmado</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy:      #0f1e2e;
+      --navy-mid:  #162436;
+      --teal:      #1a6b7a;
+      --teal-light:#2a8fa1;
+      --amber:     #f59e0b;
+      --white:     #f8fafc;
+      --gray-400:  #94a3b8;
+      --green:     #10b981;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Fundo animado sutil */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 20%, rgba(26,107,122,.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(245,158,11,.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      animation: rise .5s ease both;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Ícone de sucesso animado */
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.75rem;
+      position: relative;
+    }
+
+    .circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(16,185,129,.12);
+      border: 2px solid rgba(16,185,129,.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pop .4s .1s ease both;
+    }
+
+    @keyframes pop {
+      from { transform: scale(.6); opacity: 0; }
+      to   { transform: scale(1);  opacity: 1; }
+    }
+
+    .checkmark {
+      font-size: 2.2rem;
+      animation: fadein .3s .4s ease both;
+    }
+
+    @keyframes fadein {
+      from { opacity: 0; transform: scale(.5); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .logo {
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--gray-400);
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .logo span { color: var(--amber); }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: .6rem;
+      letter-spacing: -.3px;
+    }
+
+    .subtitle {
+      font-size: .95rem;
+      color: var(--gray-400);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .status-box {
+      background: rgba(16,185,129,.08);
+      border: 1px solid rgba(16,185,129,.2);
+      border-radius: 10px;
+      padding: .85rem 1.1rem;
+      font-size: .875rem;
+      color: #6ee7b7;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+    }
+
+    /* Barra de progresso do redirecionamento */
+    .redirect-info {
+      font-size: .8rem;
+      color: var(--gray-400);
+      margin-bottom: .75rem;
+    }
+
+    .progress-track {
+      height: 3px;
+      background: rgba(255,255,255,.07);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal), var(--teal-light));
+      border-radius: 2px;
+      width: 0%;
+      transition: width linear;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .85rem 1.75rem;
+      background: var(--teal);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-size: .95rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s, transform .1s;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn:hover { background: var(--teal-light); }
+    .btn:active { transform: scale(.99); }
+
+    /* Estado de erro */
+    .card.error .circle {
+      background: rgba(239,68,68,.12);
+      border-color: rgba(239,68,68,.3);
+    }
+    .card.error .status-box {
+      background: rgba(239,68,68,.08);
+      border-color: rgba(239,68,68,.2);
+      color: #fca5a5;
+    }
+    .card.error .progress-track,
+    .card.error .redirect-info { display: none; }
+    .card.error .btn { background: var(--teal); }
+
+    /* Estado de loading inicial */
+    .card.loading .success-icon,
+    .card.loading h1,
+    .card.loading .subtitle,
+    .card.loading .status-box,
+    .card.loading .redirect-info,
+    .card.loading .progress-track,
+    .card.loading .btn { opacity: 0; }
+
+    .loading-spinner {
+      display: none;
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(255,255,255,.1);
+      border-top-color: var(--teal-light);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    .card.loading .loading-spinner { display: block; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<div class="card loading" id="card">
+  <div class="logo">Edu<span>Share</span></div>
+
+  <div class="loading-spinner"></div>
+
+  <div class="success-icon">
+    <div class="circle">
+      <span class="checkmark">✓</span>
+    </div>
+  </div>
+
+  <h1 id="title">E-mail confirmado!</h1>
+
+  <p class="subtitle" id="subtitle">
+    Sua conta foi verificada com sucesso.<br />
+    Você já pode acessar a plataforma.
+  </p>
+
+  <div class="status-box" id="statusBox">
+    ✅ Conta ativa e pronta para uso
+  </div>
+
+  <p class="redirect-info" id="redirectInfo">Redirecionando em <strong id="countdown">5</strong>s…</p>
+  <div class="progress-track">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <a href="index.html" class="btn" id="btn">
+    🚀 Acessar agora
+  </a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/supabase.js"></script>
+<script>
+  const REDIRECT_DELAY = 5; // segundos
+
+  async function init() {
+    const card = document.getElementById('card');
+
+    // Supabase lida com o token da URL automaticamente via onAuthStateChange
+    // mas vamos verificar a sessão após um pequeno delay para ele processar
+    await new Promise(r => setTimeout(r, 800));
+
+    const { data: { session }, error } = await sb.auth.getSession();
+
+    card.classList.remove('loading');
+
+    if (session && !error) {
+      showSuccess();
+    } else {
+      // Tenta trocar o token da URL manualmente (fluxo PKCE)
+      const hash = window.location.hash;
+      const params = new URLSearchParams(window.location.search);
+      const hasTokenInURL = hash.includes('access_token') || params.get('token_hash');
+
+      if (hasTokenInURL) {
+        showSuccess();
+      } else {
+        showError();
+      }
+    }
+  }
+
+  function showSuccess() {
+    startCountdown();
+  }
+
+  function showError() {
+    const card = document.getElementById('card');
+    card.classList.add('error');
+    document.getElementById('title').textContent = 'Link inválido ou expirado';
+    document.getElementById('subtitle').textContent =
+      'O link de confirmação pode ter expirado ou já foi utilizado. Tente fazer login ou solicite um novo e-mail.';
+    document.getElementById('statusBox').innerHTML = '⚠️ Não foi possível confirmar o e-mail';
+    document.getElementById('checkmark')?.remove();
+    document.querySelector('.checkmark').textContent = '✕';
+    document.getElementById('btn').textContent = '← Voltar ao login';
+  }
+
+  function startCountdown() {
+    let remaining = REDIRECT_DELAY;
+    const countdown = document.getElementById('countdown');
+    const bar = document.getElementById('progressBar');
+
+    // Inicia a barra de progresso
+    bar.style.transitionDuration = REDIRECT_DELAY + 's';
+    requestAnimationFrame(() => { bar.style.width = '100%'; });
+
+    const interval = setInterval(() => {
+      remaining--;
+      countdown.textContent = remaining;
+      if (remaining <= 0) {
+        clearInterval(interval);
+        window.location.href = 'index.html';
+      }
+    }, 1000);
+  }
+
+  init();
+</script>
+</body>
+</html>
