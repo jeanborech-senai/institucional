@@ -88,6 +88,7 @@ function setupForms() {
         email,
         password,
         options: {
+          emailRedirectTo: 'https://jeanborech-senai.github.io/institucional/confirm.html',
           data: { full_name: name }
         }
       });
